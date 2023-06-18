@@ -1,16 +1,54 @@
-export class PlayGame extends Phaser.Scene {
-    image: Phaser.GameObjects.Image | null;
+import BoardPlugin from "phaser3-rex-plugins/plugins/board-plugin";
+import Vector3 = Phaser.Math.Vector3;
+import GameObject = Phaser.GameObjects.GameObject;
+import Pointer = Phaser.Input.Pointer;
+import {CastleDiceBoard} from "./Board.ts";
+import {TileXYType} from "phaser3-rex-plugins/plugins/board/types/Position";
+
+const Random = Phaser.Math.Between;
+
+
+export class Game extends Phaser.Scene {
+    rexBoard: BoardPlugin;
+    board: BoardPlugin.Board;
+    print: Phaser.GameObjects.Text;
+    cameraController: Phaser.Cameras.Controls.SmoothedKeyControl;
+
     constructor() {
-        super("PlayGame");
-        this.image = null;
+        super({
+            key: 'mainScreen'
+        })
     }
-    preload() {
-        this.load.image('logo', import.meta.env.BASE_URL + 'assets/sprites/phaser3-logo.png');
-    }
+
+    preload() { }
+
     create() {
-        this.image = this.add.image(400, 300, 'logo');
+        this.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, 'background').setOrigin(0, 0);
+
+        let board = new CastleDiceBoard(this, this.rexBoard);
+        board.setInteractive();
+
+        this.board = board;
+        this.print = this.add.text(0, 0, '').setScrollFactor(0);
+
+
+        let cursors = this.input.keyboard!.createCursorKeys();
+        this.cameraController = new Phaser.Cameras.Controls.SmoothedKeyControl({
+            camera: this.cameras.main,
+
+            left: cursors.left,
+            right: cursors.right,
+            up: cursors.up,
+            down: cursors.down,
+        });
     }
-    update() {
-        this.image!.rotation += 0.01;
+
+    update(time: number, delta: number) {
+        this.cameraController.update(delta);
+
+        let pointer = this.input.activePointer;
+        let out = this.board.worldXYToTileXY(pointer.worldX, pointer.worldY, true);
+        this.print.setText(out.x + ',' + out.y);
     }
+
 }
