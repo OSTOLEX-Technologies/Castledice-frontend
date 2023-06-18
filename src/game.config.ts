@@ -24,3 +24,7 @@ export const config = {
 export const images = {
     "background": import.meta.env.BASE_URL + "assets/terrain.png",
 }
+
+export const sounds = {
+
+}

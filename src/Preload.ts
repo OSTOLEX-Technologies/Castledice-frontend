@@ -1,6 +1,6 @@
 import BoardPlugin from "phaser3-rex-plugins/plugins/board-plugin";
 import {CastleDiceBoard} from "./Board.ts";
-import {config, images} from "./game.config.ts";
+import {config, images, sounds} from "./game.config.ts";
 
 export class Preload extends Phaser.Scene {
     constructor() {
@@ -9,10 +9,18 @@ export class Preload extends Phaser.Scene {
         })
     }
 
-    preload() {
+    preloadAssets() {
         for (let key in images) {
             this.load.image(key, images[key]);
         }
+        for (let key in sounds) {
+            this.load.audio(key, sounds[key]);
+        }
+    }
+
+    preload() {
+        this.preloadAssets();
+
         const progressBar = this.add.graphics();
         const progressBox = this.add.graphics();
 
