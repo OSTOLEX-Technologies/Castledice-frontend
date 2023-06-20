@@ -1,0 +1,30 @@
+name: Build project to static
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Build project to static in branch "build"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Use Node.js
+        uses: actions/setup-node@main
+        with:
+          node-version: 18.x
+      - name: yarn install and build
+        run: |
+          yarn
+          BASE_URL=https://castledice.ostolex.com/ yarn build
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-east-1'
+          SOURCE_DIR: 'dist'
