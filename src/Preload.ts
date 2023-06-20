@@ -69,6 +69,7 @@ export class Preload extends Phaser.Scene {
 
         this.load.on('fileprogress', function (file) {
             loadingText.text = 'Loading ' + file.key + '...';
+            console.log(file.key);
         });
         this.load.on('complete', function () {
             progressBar.destroy();

@@ -23,6 +23,11 @@ export const config = {
 
 export const images = {
     "background": import.meta.env.BASE_URL + "assets/terrain.png",
+    "test": import.meta.env.BASE_URL + "assets/sprites/test.png",
+    "defaultTile": import.meta.env.BASE_URL + "assets/sprites/tiles/Tile.png",
+    "redCastle": import.meta.env.BASE_URL + "assets/sprites/tiles/Red castle.png",
+    "tree": import.meta.env.BASE_URL + "assets/sprites/tiles/Tree.png",
+    "blueCastle": import.meta.env.BASE_URL + "assets/sprites/tiles/Blue castle.png",
 }
 
 export const sounds = {
