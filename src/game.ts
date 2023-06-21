@@ -4,15 +4,17 @@ import GameObject = Phaser.GameObjects.GameObject;
 import Pointer = Phaser.Input.Pointer;
 import {CastleDiceBoard} from "./Board.ts";
 import {TileXYType} from "phaser3-rex-plugins/plugins/board/types/Position";
+import {GameLogic} from "./GameLogic.ts";
 
 const Random = Phaser.Math.Between;
 
 
 export class Game extends Phaser.Scene {
     rexBoard: BoardPlugin;
-    board: BoardPlugin.Board;
+    board: CastleDiceBoard;
     print: Phaser.GameObjects.Text;
     cameraController: Phaser.Cameras.Controls.SmoothedKeyControl;
+    logic: GameLogic;
 
     constructor() {
         super({
@@ -30,6 +32,7 @@ export class Game extends Phaser.Scene {
 
         this.board = board;
         this.print = this.add.text(0, 0, '').setScrollFactor(0);
+        this.logic = new GameLogic(this.board);
 
 
         let cursors = this.input.keyboard!.createCursorKeys();

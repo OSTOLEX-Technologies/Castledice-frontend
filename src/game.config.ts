@@ -34,3 +34,24 @@ export const images = {
 export const sounds = {
 
 }
+
+export enum ChessType {
+    BoardPart = 0,
+    Base = 1,
+    Highlight = 2,
+    Occupy = 3,
+}
+
+export enum TileState {
+    Empty = 0,
+    Player = 1, // red player
+    Opponent = 2, // blue player
+    Tree = 3,
+    PlayerBase = 4,
+    OpponentBase = 5,
+}
+
+export enum Players {
+    Player = 0,
+    Opponent = 1,
+}

@@ -5,12 +5,8 @@ import Alpha = Phaser.GameObjects.Components.Alpha;
 import Pointer = Phaser.Input.Pointer;
 import {TileXYType} from "phaser3-rex-plugins/plugins/board/types/Position";
 import destroy = Phaser.Loader.FileTypesManager.destroy;
+import {ChessType, Players} from "./game.config.ts";
 
-enum TileZIndex {
-    BoardPart = 0,
-    Occupy = 1,
-    Highlight = 2,
-}
 
 class AlphaGameObject extends GameObject implements Alpha {
     alpha: number;
@@ -52,19 +48,19 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
             if (tileXY.y === 0 && tileXY.x === 0) {
                 board.addChess(
                     this.scene.add.image(0, 0, 'redCastle').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
-                    tileXY.x, tileXY.y, TileZIndex.BoardPart
+                    tileXY.x, tileXY.y, ChessType.Base
                 );
             }
             else if (tileXY.y === 9 && tileXY.x === 9) {
                 board.addChess(
                     this.scene.add.image(0, 0, 'blueCastle').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
-                    tileXY.x, tileXY.y, TileZIndex.BoardPart
+                    tileXY.x, tileXY.y, ChessType.Base
                 );
             }
             else {
                 board.addChess(
                     this.scene.add.image(0, 0, 'defaultTile').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
-                    tileXY.x, tileXY.y, TileZIndex.BoardPart
+                    tileXY.x, tileXY.y, ChessType.BoardPart
                 );
             }
         }, scene).setInteractive()
@@ -87,10 +83,18 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
                     return;
                 }
                 // this.placeChess(tileXY, 'red');
-                if (this.isHighlighted(tileXY)) {
-                    this.removeHighlight(tileXY);
+                // if (this.isHighlighted(tileXY)) {
+                //     this.removeHighlight(tileXY);
+                // } else {
+                //     this.highlightTile(tileXY);
+                // }
+                // @ts-ignore
+                if (!this.scene.logic.isBoardHighlighted()) {
+                    // @ts-ignore
+                    this.scene.logic.highlightAvailableMoves(3);
                 } else {
-                    this.highlightTile(tileXY);
+                    // @ts-ignore
+                    this.scene.logic.removeHighlightAvailableMoves();
                 }
             })
     }
@@ -100,7 +104,7 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
     }
 
     isOccupied(tileXY: TileXYType): boolean {
-        return this.tileXYZToChess(tileXY.x, tileXY.y, TileZIndex.Occupy) !== null;
+        return this.tileXYZToChess(tileXY.x, tileXY.y, ChessType.Occupy) !== null;
     }
 
     isTree(tileXY: TileXYType): boolean {
@@ -112,30 +116,30 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
         return tileXY.x > 1 && tileXY.y > 1 ? tileXY.x * tileXY.y : tileXY.x + tileXY.y;
     }
 
-    placeChess(tileXY: TileXYType, color: 'red' | 'blue'): this {
+    placeChess(tileXY: TileXYType, color: Players): this {
         // TODO: add chess of specific color to the board
         const chip = this.scene.add.image(0, 0, 'tree')
             .setAlpha(1).setDepth(this.calculateDepth(tileXY));
         chip.scale = 0.18;
-        this.addChess(chip, tileXY.x, tileXY.y, TileZIndex.Occupy, true);
+        this.addChess(chip, tileXY.x, tileXY.y, ChessType.Occupy, true);
         return this;
     }
 
     highlightTile(tileXY: TileXYType): this {
         const texture = this.scene.add.image(0, 0, 'highlightedTile')
             .setAlpha(0.4).setScale(0.18).setDepth(this.calculateDepth(tileXY));
-        this.addChess(texture, tileXY.x, tileXY.y, 2, true);
+        this.addChess(texture, tileXY.x, tileXY.y, ChessType.Highlight, true);
         return this;
     }
 
     removeHighlight(tileXY: TileXYType): this {
         const chess = this.tileXYZToChess(tileXY.x, tileXY.y, 2);
         // @ts-ignore
-        this.removeChess(chess, tileXY.x, tileXY.y, 2, true);
+        this.removeChess(chess, tileXY.x, tileXY.y, ChessType.Highlight, true);
         return this;
     }
 
     isHighlighted(tileXY: TileXYType): boolean {
-        return this.tileXYZToChess(tileXY.x, tileXY.y, 2) !== null;
+        return this.tileXYZToChess(tileXY.x, tileXY.y, ChessType.Highlight) !== null;
     }
 }
