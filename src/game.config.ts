@@ -28,6 +28,7 @@ export const images = {
     "redCastle": import.meta.env.BASE_URL + "assets/sprites/tiles/Red castle.png",
     "tree": import.meta.env.BASE_URL + "assets/sprites/tiles/Tree.png",
     "blueCastle": import.meta.env.BASE_URL + "assets/sprites/tiles/Blue castle.png",
+    "highlightedTile": import.meta.env.BASE_URL + "assets/sprites/tiles/Highlighted tile.png",
 }
 
 export const sounds = {
