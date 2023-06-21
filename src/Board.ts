@@ -44,26 +44,7 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
         rexBoard.createTileTexture(this, 'tile', 0xffffff00, 0xff0000, 3);
         rexBoard.createTileTexture(this, 'playerBase', 0x0000ff, 0xff0000, 2);
         rexBoard.createTileTexture(this, 'opponentBase', 0xff0000, 0xff0000, 2);
-        this.forEachTileXY((tileXY, board) => {
-            if (tileXY.y === 0 && tileXY.x === 0) {
-                board.addChess(
-                    this.scene.add.image(0, 0, 'redCastle').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
-                    tileXY.x, tileXY.y, ChessType.Base
-                );
-            }
-            else if (tileXY.y === 9 && tileXY.x === 9) {
-                board.addChess(
-                    this.scene.add.image(0, 0, 'blueCastle').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
-                    tileXY.x, tileXY.y, ChessType.Base
-                );
-            }
-            else {
-                board.addChess(
-                    this.scene.add.image(0, 0, 'defaultTile').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
-                    tileXY.x, tileXY.y, ChessType.BoardPart
-                );
-            }
-        }, scene).setInteractive()
+        this.setInteractive()
         this.on('tileover', (pointer: Pointer, tileXY) => {
             pointer.manager.setDefaultCursor('pointer');
             // const tile  = this.tileXYZToChess(tileXY.x, tileXY.y, 0);
@@ -99,6 +80,48 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
             })
     }
 
+    public addPlayerBase(tileXY) {
+        this.addChess(
+            this.scene.add.image(0, 0, 'redCastle').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
+            tileXY.x, tileXY.y, ChessType.Base
+        );
+    }
+
+    public addOpponentBase(tileXY) {
+        this.addChess(
+            this.scene.add.image(0, 0, 'blueCastle').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
+            tileXY.x, tileXY.y, ChessType.Base
+        );
+    }
+
+    public addPlayerChess(tileXY) {
+        this.addChess(
+            this.scene.add.image(0, 0, 'knightRed').setAlpha(1).setScale(0.14).setDepth(this.calculateDepth(tileXY) + 1),
+            tileXY.x, tileXY.y, ChessType.Occupy
+        );
+    }
+
+    public addOpponentChess(tileXY) {
+        this.addChess(
+            this.scene.add.image(0, 0, 'knightBlue').setAlpha(1).setScale(0.14).setDepth(this.calculateDepth(tileXY) + 1),
+            tileXY.x, tileXY.y, ChessType.Occupy
+        );
+    }
+
+    public addTile(tileXY) {
+        this.addChess(
+            this.scene.add.image(0, 0, 'defaultTile').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
+            tileXY.x, tileXY.y, ChessType.BoardPart
+        );
+    }
+
+    public addTree(tileXY) {
+        this.addChess(
+            this.scene.add.image(0, 0, 'tree').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
+            tileXY.x, tileXY.y, ChessType.Occupy
+        );
+    }
+
     isBase(tileXY: TileXYType): boolean {
         return tileXY.x === 0 && tileXY.y === 0 || tileXY.x === 9 && tileXY.y === 9;
     }
@@ -116,7 +139,14 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
         return tileXY.x > 1 && tileXY.y > 1 ? tileXY.x * tileXY.y : tileXY.x + tileXY.y;
     }
 
-    placeChess(tileXY: TileXYType, color: Players): this {
+    public placeTree(tileXY: TileXYType): this {
+        const texture = this.scene.add.image(0, 0, 'tree')
+            .setAlpha(1).setDepth(this.calculateDepth(tileXY)).setScale(0.18);
+        this.addChess(texture, tileXY.x, tileXY.y, ChessType.Occupy, true);
+        return this;
+    }
+
+    public placeChess(tileXY: TileXYType, color: Players): this {
         // TODO: add chess of specific color to the board
         const chip = this.scene.add.image(0, 0, 'tree')
             .setAlpha(1).setDepth(this.calculateDepth(tileXY));
@@ -126,7 +156,8 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
     }
 
     highlightTile(tileXY: TileXYType): this {
-        const texture = this.scene.add.image(0, 0, 'highlightedTile')
+        const textureName = this.isOccupied(tileXY) ? 'clashHighlighted' : 'highlightedTile';
+        const texture = this.scene.add.image(0, 0, textureName)
             .setAlpha(0.4).setScale(0.18).setDepth(this.calculateDepth(tileXY));
         this.addChess(texture, tileXY.x, tileXY.y, ChessType.Highlight, true);
         return this;

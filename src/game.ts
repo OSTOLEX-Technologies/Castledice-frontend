@@ -1,10 +1,9 @@
 import BoardPlugin from "phaser3-rex-plugins/plugins/board-plugin";
-import Vector3 = Phaser.Math.Vector3;
-import GameObject = Phaser.GameObjects.GameObject;
-import Pointer = Phaser.Input.Pointer;
 import {CastleDiceBoard} from "./Board.ts";
-import {TileXYType} from "phaser3-rex-plugins/plugins/board/types/Position";
 import {GameLogic} from "./GameLogic.ts";
+import {Players} from "./game.config.ts";
+import defaultSetup from './assets/defaultSetup.json';
+import {ArraySerializer} from "./serializers.ts";
 
 const Random = Phaser.Math.Between;
 
@@ -32,7 +31,9 @@ export class Game extends Phaser.Scene {
 
         this.board = board;
         this.print = this.add.text(0, 0, '').setScrollFactor(0);
-        this.logic = new GameLogic(this.board);
+
+        const serializer = new ArraySerializer("blue");
+        this.logic = new GameLogic(this.board, Players.Player, serializer.deserialize(defaultSetup));
 
 
         let cursors = this.input.keyboard!.createCursorKeys();

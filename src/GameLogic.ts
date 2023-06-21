@@ -7,18 +7,46 @@ export class GameLogic {
     private readonly cells: Array<Array<TileState>>; // every array is a column, every element is a row
     private isHighlighted = false;
 
-    constructor(public board: CastleDiceBoard, public turn: Players = Players.Player) {
+    constructor(public board: CastleDiceBoard, public turn: Players = Players.Player, setup?: Array<Array<TileState>>) {
         this.cells = new Array<Array<TileState>>(10);
-        for (let i = 0; i < 10; i++) {
-            this.cells[i] = new Array<TileState>(10);
-            for (let j = 0; j < 10; j++) {
-                if (i === 0 && j === 0)
-                    this.cells[i][j] = TileState.OpponentBase;
-                else if (i === 9 && j === 9)
-                    this.cells[i][j] = TileState.PlayerBase;
-                else this.cells[i][j] = TileState.Empty;
+
+        if (setup) {
+            this.cells = setup.map(row => row.map(cell => cell));
+        } else {
+            for (let i = 0; i < 10; i++) {
+                this.cells[i] = new Array<TileState>(10);
+                for (let j = 0; j < 10; j++) {
+                    if (i === 0 && j === 0)
+                        this.cells[i][j] = TileState.OpponentBase;
+                    else if (i === 9 && j === 9)
+                        this.cells[i][j] = TileState.PlayerBase;
+                    else this.cells[i][j] = TileState.Empty;
+                }
             }
         }
+        this.initBoard()
+    }
+
+    public initBoard() {
+        this.board.forEachTileXY((tileXY, board) => {
+            const {x, y} = tileXY;
+            const tileState = this.cells[x][y];
+            if (tileState === TileState.PlayerBase) {
+                this.board.addPlayerBase(tileXY);
+            } else if (tileState === TileState.OpponentBase) {
+                this.board.addOpponentBase(tileXY);
+            } else if (tileState === TileState.Player) {
+                this.board.addTile(tileXY);
+                this.board.addPlayerChess(tileXY);
+            } else if (tileState === TileState.Opponent) {
+                this.board.addTile(tileXY);
+                this.board.addOpponentChess(tileXY);
+            } else if (tileState === TileState.Empty) {
+                this.board.addTile(tileXY);
+            } else if (tileState === TileState.Tree) {
+                this.board.addTree(tileXY);
+            }
+        });
     }
 
     public switchTurn() {
@@ -63,17 +91,18 @@ export class GameLogic {
         this.isHighlighted = false;
     }
 
-    public findAvailableMoves(actions: number) : Set<{x: number, y: number}> {
+    public findAvailableMoves(actions: number) : Array<{x: number, y: number}> {
         if (this.turn !== Players.Player) throw new Error("It's not your turn!");
 
-        const availableMoves = new Set<{x: number, y: number}>();
+        const availableMoves = new Array<{x: number, y: number}>();
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
                 if (this.cells[i][j] === TileState.PlayerBase || this.cells[i][j] === TileState.Player) {
                     for (let neighbour of this.findNeighbours(i, j)) {
                         if (neighbour.state === TileState.Empty ||
                             (neighbour.state === TileState.Opponent && actions >= 3)) {
-                            availableMoves.add({x: neighbour.x, y: neighbour.y});
+                            if (!availableMoves.find(move => move.x === neighbour.x && move.y === neighbour.y))
+                                availableMoves.push({x: neighbour.x, y: neighbour.y});
                         }
                     }
                 }
