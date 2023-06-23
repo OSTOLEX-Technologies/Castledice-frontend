@@ -45,6 +45,16 @@ export class Game extends Phaser.Scene {
             up: cursors.up,
             down: cursors.down,
         });
+        // this.logic.removePlayerTails();
+        this.logic.removeOpponentTails();
+        this.logic.highlightAvailableMoves(3);
+        this.board.on('tileup', (pointer, tileXY) => {
+            if (!this.logic.isMoveAvailable(tileXY.x, tileXY.y, 3)) {
+                return;
+            }
+            this.logic.placeChess(tileXY.x, tileXY.y, 3);
+            this.logic.highlightAvailableMoves(3);
+        });
     }
 
     update(time: number, delta: number) {

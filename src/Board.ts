@@ -32,7 +32,7 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
             grid: {
                 gridType: 'quadGrid',
                 x: window.innerWidth / 2,
-                y: window.innerHeight / 5,
+                y: window.innerHeight / 3.7,
                 cellWidth: 105,
                 cellHeight: 60,
                 type: 'isometric'  // 'orthogonal'|'isometric'
@@ -66,14 +66,6 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
                 // } else {
                 //     this.highlightTile(tileXY);
                 // }
-                // @ts-ignore
-                if (!this.scene.logic.isBoardHighlighted()) {
-                    // @ts-ignore
-                    this.scene.logic.highlightAvailableMoves(3);
-                } else {
-                    // @ts-ignore
-                    this.scene.logic.removeHighlightAvailableMoves();
-                }
             })
     }
 
