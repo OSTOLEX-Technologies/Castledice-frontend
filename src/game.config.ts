@@ -43,6 +43,7 @@ export enum ChessType {
     Base = 1,
     Highlight = 2,
     Occupy = 3,
+    Tree = 4,
 }
 
 export enum TileState {

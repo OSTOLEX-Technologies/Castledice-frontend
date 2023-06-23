@@ -41,9 +41,6 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
             height: 10
         });
         this.rexBoard = rexBoard;
-        rexBoard.createTileTexture(this, 'tile', 0xffffff00, 0xff0000, 3);
-        rexBoard.createTileTexture(this, 'playerBase', 0x0000ff, 0xff0000, 2);
-        rexBoard.createTileTexture(this, 'opponentBase', 0xff0000, 0xff0000, 2);
         this.setInteractive()
         this.on('tileover', (pointer: Pointer, tileXY) => {
             pointer.manager.setDefaultCursor('pointer');
@@ -82,30 +79,38 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
 
     public addPlayerBase(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'redCastle').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
+            this.scene.add.image(0, 0, 'blueCastle').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
             tileXY.x, tileXY.y, ChessType.Base
         );
     }
 
     public addOpponentBase(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'blueCastle').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
+            this.scene.add.image(0, 0, 'redCastle').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
             tileXY.x, tileXY.y, ChessType.Base
         );
     }
 
     public addPlayerChess(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'knightRed').setAlpha(1).setScale(0.14).setDepth(this.calculateDepth(tileXY) + 1),
+            this.scene.add.image(0, 0, 'knightBlue').setAlpha(1).setScale(0.14).setDepth(this.calculateDepth(tileXY) + 1),
             tileXY.x, tileXY.y, ChessType.Occupy
         );
     }
 
     public addOpponentChess(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'knightBlue').setAlpha(1).setScale(0.14).setDepth(this.calculateDepth(tileXY) + 1),
+            this.scene.add.image(0, 0, 'knightRed').setAlpha(1).setScale(0.14).setDepth(this.calculateDepth(tileXY) + 1),
             tileXY.x, tileXY.y, ChessType.Occupy
         );
+    }
+
+    public deleteChess(tileXY) {
+        const chess = this.tileXYZToChess(tileXY.x, tileXY.y, ChessType.Occupy);
+        if (chess) {
+            // @ts-ignore
+            this.removeChess(chess, tileXY.x, tileXY.y, ChessType.Occupy, true);
+        }
     }
 
     public addTile(tileXY) {
@@ -118,7 +123,7 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
     public addTree(tileXY) {
         this.addChess(
             this.scene.add.image(0, 0, 'tree').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
-            tileXY.x, tileXY.y, ChessType.Occupy
+            tileXY.x, tileXY.y, ChessType.Tree
         );
     }
 
@@ -127,32 +132,16 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
     }
 
     isOccupied(tileXY: TileXYType): boolean {
-        return this.tileXYZToChess(tileXY.x, tileXY.y, ChessType.Occupy) !== null;
+        return this.tileXYZToChess(tileXY.x, tileXY.y, ChessType.Occupy) !== null || this.isTree(tileXY);
     }
 
     isTree(tileXY: TileXYType): boolean {
         // @ts-ignore
-        return this.tileXYToChessArray(tileXY.x, tileXY.y).map((chess) => chess.texture.key === 'tree').includes(true);
+        return this.tileXYZToChess(tileXY.x, tileXY.y, ChessType.Tree) !== null;
     }
 
     calculateDepth(tileXY: TileXYType): number {
         return tileXY.x > 1 && tileXY.y > 1 ? tileXY.x * tileXY.y : tileXY.x + tileXY.y;
-    }
-
-    public placeTree(tileXY: TileXYType): this {
-        const texture = this.scene.add.image(0, 0, 'tree')
-            .setAlpha(1).setDepth(this.calculateDepth(tileXY)).setScale(0.18);
-        this.addChess(texture, tileXY.x, tileXY.y, ChessType.Occupy, true);
-        return this;
-    }
-
-    public placeChess(tileXY: TileXYType, color: Players): this {
-        // TODO: add chess of specific color to the board
-        const chip = this.scene.add.image(0, 0, 'tree')
-            .setAlpha(1).setDepth(this.calculateDepth(tileXY));
-        chip.scale = 0.18;
-        this.addChess(chip, tileXY.x, tileXY.y, ChessType.Occupy, true);
-        return this;
     }
 
     highlightTile(tileXY: TileXYType): this {
