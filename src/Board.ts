@@ -85,14 +85,14 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
 
     public addPlayerChess(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'knightBlue').setAlpha(1).setScale(0.14).setDepth(this.calculateDepth(tileXY) + 1),
+            this.scene.add.image(0, 0, 'knightBlue').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY) + 1),
             tileXY.x, tileXY.y, ChessType.Occupy
         );
     }
 
     public addOpponentChess(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'knightRed').setAlpha(1).setScale(0.14).setDepth(this.calculateDepth(tileXY) + 1),
+            this.scene.add.image(0, 0, 'knightRed').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY) + 1),
             tileXY.x, tileXY.y, ChessType.Occupy
         );
     }

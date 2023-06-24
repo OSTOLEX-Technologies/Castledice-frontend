@@ -33,7 +33,7 @@ export class Game extends Phaser.Scene {
         this.print = this.add.text(0, 0, '').setScrollFactor(0);
 
         const serializer = new ArraySerializer("blue");
-        this.logic = new GameLogic(this.board, Players.Player, serializer.deserialize(defaultSetup));
+        this.logic = new GameLogic(this.board, serializer.deserialize(defaultSetup));
 
 
         let cursors = this.input.keyboard!.createCursorKeys();
@@ -45,15 +45,21 @@ export class Game extends Phaser.Scene {
             up: cursors.up,
             down: cursors.down,
         });
-        // this.logic.removePlayerTails();
+        this.logic.removePlayerTails();
         this.logic.removeOpponentTails();
-        this.logic.highlightAvailableMoves(3);
+        this.logic.start(Players.Player, 3);
+        this.logic.highlightAvailableMoves();
         this.board.on('tileup', (pointer, tileXY) => {
-            if (!this.logic.isMoveAvailable(tileXY.x, tileXY.y, 3)) {
+            if (!this.logic.isMoveAvailable(tileXY.x, tileXY.y)) {
                 return;
             }
-            this.logic.placeChess(tileXY.x, tileXY.y, 3);
-            this.logic.highlightAvailableMoves(3);
+            this.logic.placeChess(tileXY.x, tileXY.y);
+            if (this.logic.actions > 0) {
+                this.logic.highlightAvailableMoves();
+            } else {
+                this.logic.switchTurn(4)
+                this.logic.removeHighlightAvailableMoves();
+            }
         });
     }
 

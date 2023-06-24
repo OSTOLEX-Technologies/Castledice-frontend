@@ -59,3 +59,7 @@ export enum Players {
     Player = 0,
     Opponent = 1,
 }
+
+
+export const CLASH_ACTIONS = 3;
+export const OCCUPY_EMPTY_ACTIONS = 1;
