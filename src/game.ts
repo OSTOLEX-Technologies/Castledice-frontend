@@ -11,7 +11,8 @@ const Random = Phaser.Math.Between;
 export class Game extends Phaser.Scene {
     rexBoard: BoardPlugin;
     board: CastleDiceBoard;
-    print: Phaser.GameObjects.Text;
+    actionsCount: Phaser.GameObjects.Text;
+    currentTurn: Phaser.GameObjects.Text;
     cameraController: Phaser.Cameras.Controls.SmoothedKeyControl;
     logic: GameLogic;
 
@@ -30,7 +31,15 @@ export class Game extends Phaser.Scene {
         board.setInteractive();
 
         this.board = board;
-        this.print = this.add.text(0, 0, '').setScrollFactor(0);
+        this.actionsCount = this.add.text(0, 32, '', {
+            fontSize: '32px',
+            color: '#000'
+        }).setScrollFactor(0);
+
+        this.currentTurn = this.add.text(0, 0, '', {
+            fontSize: '32px',
+            color: '#000'
+        }).setScrollFactor(0);
 
         const serializer = new ArraySerializer("blue");
         this.logic = new GameLogic(this.board, serializer.deserialize(defaultSetup));
@@ -65,10 +74,12 @@ export class Game extends Phaser.Scene {
 
     update(time: number, delta: number) {
         this.cameraController.update(delta);
-
-        let pointer = this.input.activePointer;
-        let out = this.board.worldXYToTileXY(pointer.worldX, pointer.worldY, true);
-        this.print.setText(out.x + ',' + out.y);
+        this.actionsCount.setText(`Actions left: ${this.logic.actions}`);
+        if (this.logic.turn === Players.Player) {
+            this.currentTurn.setText(`Your turn`);
+        } else {
+            this.currentTurn.setText(`Opponent turn`);
+        }
     }
 
 }
