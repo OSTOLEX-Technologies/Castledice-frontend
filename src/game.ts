@@ -70,6 +70,7 @@ export class Game extends Phaser.Scene {
             this.logic.placeChess(tileXY.x, tileXY.y);
             this.canMove = false;
             if (this.logic.actions > 0) {
+                console.log("highlighting on moving");
                 this.logic.highlightAvailableMoves();
             } else {
                 this.logic.removeHighlightAvailableMoves();
@@ -86,7 +87,9 @@ export class Game extends Phaser.Scene {
             this.logic.actions = e.detail.actions;
         });
         window.addEventListener('switchTurnInternal', (e: CustomEvent) => {
+            console.log("switching turn", e.detail.actions, this.logic.turn, "player", Players.Player, "opponent", Players.Opponent);
             this.logic.switchTurn(e.detail.actions);
+            console.log("switched turn", this.logic.turn, "player", Players.Player, "opponent", Players.Opponent);
             this.currentPlayerColor = this.currentPlayerColor === 'red' ? 'blue' : 'red';
             if (this.logic.turn === Players.Player) {
                 this.logic.highlightAvailableMoves();

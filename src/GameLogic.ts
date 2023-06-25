@@ -105,7 +105,7 @@ export class GameLogic {
         if (this.turn !== Players.Player) throw new Error("It's not your turn!");
         if (!this.isMoveAvailable(x, y)) throw new Error("You can't move there!");
 
-        if (this.cells[x][y] === TileState.Opponent) {
+        if (this.cells[x][y] === TileState.Opponent || this.cells[x][y] === TileState.OpponentBase) {
             this.board.deleteChess({x, y});
             this.actions -= CLASH_ACTIONS;
         } else {
