@@ -2,6 +2,7 @@ import {Game} from "./game.ts";
 import BoardPlugin from "phaser3-rex-plugins/plugins/board-plugin";
 import {Preload} from "./Preload.ts";
 import defaultSetup from './assets/defaultSetup.json';
+import {EndScreen} from "./EndScreen.ts";
 
 export const config = {
     type: Phaser.AUTO,
@@ -12,7 +13,7 @@ export const config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [Preload, Game],
+    scene: [Preload, Game, EndScreen],
     plugins: {
         scene: [{
             key: 'rexBoard',
@@ -37,6 +38,7 @@ export const images = {
     "clashHighlighted": import.meta.env.BASE_URL + "assets/sprites/tiles/Clash.png",
     "knightRed": import.meta.env.BASE_URL + "assets/sprites/units/Knight red.png",
     "knightBlue": import.meta.env.BASE_URL + "assets/sprites/units/Knight blue.png",
+    "menuBackground": import.meta.env.BASE_URL + "assets/Menu and loading screen background.png",
 }
 
 export const sounds = {

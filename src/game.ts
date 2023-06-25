@@ -28,7 +28,7 @@ export class Game extends Phaser.Scene {
     preload() { }
 
     create() {
-        this.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, 'background').setOrigin(0, 0);
+        this.add.image(this.sys.canvas.width / 2, this.sys.canvas.height / 2, 'background').setDisplaySize(this.sys.canvas.width, this.sys.canvas.height);
 
         let board = new CastleDiceBoard(this, this.rexBoard);
         board.setInteractive();
@@ -104,6 +104,12 @@ export class Game extends Phaser.Scene {
             this.currentTurn.setText(`Your turn`);
         } else {
             this.currentTurn.setText(`Opponent turn`);
+        }
+
+        if (this.logic.isGameFinished()) {
+            this.scene.start('endScreen', {
+                message: this.logic.getWinner() === Players.Player ? 'You won!' : 'You lost!'
+            });
         }
     }
 
