@@ -16,7 +16,8 @@ export class EndScreen extends Phaser.Scene {
         // @ts-ignore
         this.add.text(this.sys.canvas.width / 2, this.sys.canvas.height / 2, this.data.get('message'), {
             fontSize: '100px',
-            color: '#fff'
+            color: '#fff',
+            fontStyle: 'bold'
         }).setOrigin(0.5, 0.4);
     }
 }
