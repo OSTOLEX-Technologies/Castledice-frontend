@@ -19,11 +19,19 @@ export class ArraySerializer extends Serializer {
             result.push([]);
         }
         if (counter == 0) {
-            result[result.length - 1].push(TileState.PlayerBase);
+            if (el === 1) {
+                result[result.length - 1].push(TileState.PlayerBase);
+            } else if (el === 2) {
+                result[result.length - 1].push(TileState.Opponent);
+            }
             counter++;
             continue;
         } else if (counter == 99) {
-            result[result.length - 1].push(TileState.OpponentBase);
+            if (el === 2) {
+                result[result.length - 1].push(TileState.OpponentBase);
+            } else if (el === 1) {
+                result[result.length - 1].push(TileState.Player);
+            }
             counter++;
             continue;
         }
