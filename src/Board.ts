@@ -32,7 +32,7 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
             grid: {
                 gridType: 'quadGrid',
                 x: window.innerWidth / 2,
-                y: window.innerHeight / 3.7,
+                y: window.innerHeight / 4.5,
                 cellWidth: 105,
                 cellHeight: 60,
                 type: 'isometric'  // 'orthogonal'|'isometric'
