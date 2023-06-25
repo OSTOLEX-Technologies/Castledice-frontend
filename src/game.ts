@@ -72,7 +72,6 @@ export class Game extends Phaser.Scene {
             if (this.logic.actions > 0) {
                 this.logic.highlightAvailableMoves();
             } else {
-                this.logic.switchTurn(4)
                 this.logic.removeHighlightAvailableMoves();
             }
         });
