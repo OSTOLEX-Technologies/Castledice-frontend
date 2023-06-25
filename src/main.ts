@@ -38,11 +38,5 @@ window.addEventListener('placeChess', (e: CustomEvent) => {
     const col = e.detail.x;
     const row = e.detail.y;
     // @ts-ignore
-    postMessage({ type: 'makeMove', payload: getAbsoluteCoords(col, row, config.playerColor) })
+    postMessage({ type: 'makeMove', payload: getAbsoluteCoords(col, row, config.playerColor), actions: e.detail.actions })
 })
-
-
-window.addEventListener('updateActions', (e: CustomEvent) => {
-    // @ts-ignore
-    postMessage({ type: 'updateActions', actions: e.detail.actions })
-});

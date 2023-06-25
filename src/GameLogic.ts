@@ -114,8 +114,7 @@ export class GameLogic {
         this.cells[x][y] = TileState.Player;
         this.board.addPlayerChess({x, y});
         this.removeOpponentTails();
-        window.dispatchEvent(new CustomEvent('updateActions', {detail: this.actions}));
-        window.dispatchEvent(new CustomEvent('placeChess', {detail: {x, y}}));
+        window.dispatchEvent(new CustomEvent('placeChess', {detail: {x, y, actions: this.actions}}));
     }
 
     public isBoardHighlighted(): boolean {
