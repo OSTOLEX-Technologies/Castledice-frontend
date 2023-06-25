@@ -88,7 +88,7 @@ export class Game extends Phaser.Scene {
         window.addEventListener('switchTurnInternal', (e: CustomEvent) => {
             this.logic.switchTurn(e.detail.actions);
             this.currentPlayerColor = this.currentPlayerColor === 'red' ? 'blue' : 'red';
-            if (this.currentPlayerColor === this.playerColor) {
+            if (this.logic.turn === Players.Player) {
                 this.logic.highlightAvailableMoves();
             }
         });
