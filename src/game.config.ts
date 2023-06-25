@@ -39,6 +39,7 @@ export const images = {
     "knightRed": import.meta.env.BASE_URL + "assets/sprites/units/Knight red.png",
     "knightBlue": import.meta.env.BASE_URL + "assets/sprites/units/Knight blue.png",
     "menuBackground": import.meta.env.BASE_URL + "assets/Menu and loading screen background.png",
+    "rules": import.meta.env.BASE_URL + "assets/Rules.png",
 }
 
 export const sounds = {

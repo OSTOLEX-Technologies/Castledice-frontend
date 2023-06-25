@@ -34,15 +34,17 @@ export class Game extends Phaser.Scene {
         board.setInteractive();
 
         this.board = board;
-        this.actionsCount = this.add.text(0, 32, '', {
+        this.actionsCount = this.add.text(0, this.sys.canvas.height - 32, '', {
             fontSize: '32px',
-            color: '#000'
+            color: '#fff'
         }).setScrollFactor(0);
 
-        this.currentTurn = this.add.text(0, 0, '', {
+        this.currentTurn = this.add.text(0, this.sys.canvas.height - 64, '', {
             fontSize: '32px',
-            color: '#000'
+            color: '#fff'
         }).setScrollFactor(0);
+
+        this.add.image(0, 0, 'rules').setOrigin(0, 0).setScrollFactor(0).setDisplaySize(this.sys.canvas.width / 4, this.sys.canvas.height / 2);
 
         this.playerColor = config.playerColor as 'red' | 'blue';
         this.currentPlayerColor = config.currentPlayerColor as 'red' | 'blue';
