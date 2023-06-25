@@ -6,7 +6,7 @@ import {TileXYType} from "phaser3-rex-plugins/plugins/board/types/Position";
 export class GameLogic {
     private cells: Array<Array<TileState>>; // every array is a column, every element is a row
     private isHighlighted = false;
-    public actions;
+    public actions: number;
     public turn = Players.Player;
 
     constructor(public board: CastleDiceBoard, setup?: Array<Array<TileState>>) {
@@ -114,6 +114,8 @@ export class GameLogic {
         this.cells[x][y] = TileState.Player;
         this.board.addPlayerChess({x, y});
         this.removeOpponentTails();
+        window.dispatchEvent(new CustomEvent('updateActions', {detail: this.actions}));
+        window.dispatchEvent(new CustomEvent('placeChess', {detail: {x, y}}));
     }
 
     public isBoardHighlighted(): boolean {

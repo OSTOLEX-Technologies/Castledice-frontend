@@ -1,6 +1,7 @@
 import {Game} from "./game.ts";
 import BoardPlugin from "phaser3-rex-plugins/plugins/board-plugin";
 import {Preload} from "./Preload.ts";
+import defaultSetup from './assets/defaultSetup.json';
 
 export const config = {
     type: Phaser.AUTO,
@@ -18,7 +19,11 @@ export const config = {
             plugin: BoardPlugin,
             mapping: 'rexBoard'
         }]
-    }
+    },
+    playerColor: 'red',
+    currentPlayerColor: 'red',
+    boardSetup: defaultSetup,
+    actionsCount: 0
 };
 
 export const images = {

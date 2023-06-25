@@ -17,3 +17,16 @@ export function invertBoardSetup(boardSetup: TileState[][]) {
 export function rotateBoardSetup(boardSetup: TileState[][]) {
     return transpose(transpose(boardSetup).map(row => row.reverse())).map(row => row.reverse());
 }
+
+
+export function getAbsoluteCoords(col, row, playerColor: 'red' | 'blue') {
+    if (playerColor === 'blue') {
+        return {row: 9 - row, col: 9 - col};
+    } else {
+        return {row: row, col: col};
+    }
+}
+
+export function postMessage(message: any) {
+    window.parent.postMessage(message, '*')
+}

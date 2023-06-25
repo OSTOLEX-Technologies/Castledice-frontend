@@ -227,6 +227,11 @@ nanoid@^3.3.6:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.6.tgz#443380c856d6e9f9824267d960b4236ad583ea4c"
   integrity sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==
 
+near-social-bridge@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/near-social-bridge/-/near-social-bridge-1.4.1.tgz#fa6757a95a0de5007bb0ebf28d46810c1a255bac"
+  integrity sha512-e8hTbBI9Pwq1aKpM6kvZ3Sy1DjjcAOau0wF/Sp9LsT7q2+F1QxeDMkO7ndQrkJI7K0+CIAvjFmoex0ikxBtnug==
+
 neo-async@^2.6.0:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"

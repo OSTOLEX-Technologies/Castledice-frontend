@@ -1,8 +1,7 @@
 import BoardPlugin from "phaser3-rex-plugins/plugins/board-plugin";
 import {CastleDiceBoard} from "./Board.ts";
 import {GameLogic} from "./GameLogic.ts";
-import {Players} from "./game.config.ts";
-import defaultSetup from './assets/defaultSetup.json';
+import {config, Players} from "./game.config.ts";
 import {ArraySerializer} from "./serializers.ts";
 
 const Random = Phaser.Math.Between;
@@ -15,6 +14,10 @@ export class Game extends Phaser.Scene {
     currentTurn: Phaser.GameObjects.Text;
     cameraController: Phaser.Cameras.Controls.SmoothedKeyControl;
     logic: GameLogic;
+    playerColor: 'red' | 'blue' = 'blue';
+    currentPlayerColor: 'red' | 'blue' = 'blue';
+    canMove: boolean = true;
+    serializer: ArraySerializer;
 
     constructor() {
         super({
@@ -41,8 +44,10 @@ export class Game extends Phaser.Scene {
             color: '#000'
         }).setScrollFactor(0);
 
-        const serializer = new ArraySerializer("blue");
-        this.logic = new GameLogic(this.board, serializer.deserialize(defaultSetup));
+        this.playerColor = config.playerColor as 'red' | 'blue';
+        this.currentPlayerColor = config.currentPlayerColor as 'red' | 'blue';
+        this.serializer = new ArraySerializer(this.playerColor);
+        this.logic = new GameLogic(this.board, this.serializer.deserialize(config.boardSetup));
 
 
         let cursors = this.input.keyboard!.createCursorKeys();
@@ -56,19 +61,32 @@ export class Game extends Phaser.Scene {
         });
         this.logic.removePlayerTails();
         this.logic.removeOpponentTails();
-        this.logic.start(Players.Player, 3);
+        this.logic.start(this.playerColor === this.currentPlayerColor ? Players.Player : Players.Opponent, config.actionsCount);
         this.logic.highlightAvailableMoves();
         this.board.on('tileup', (pointer, tileXY) => {
-            if (!this.logic.isMoveAvailable(tileXY.x, tileXY.y)) {
+            if (!this.logic.isMoveAvailable(tileXY.x, tileXY.y) || !this.canMove) {
                 return;
             }
             this.logic.placeChess(tileXY.x, tileXY.y);
+            this.canMove = false;
             if (this.logic.actions > 0) {
                 this.logic.highlightAvailableMoves();
             } else {
                 this.logic.switchTurn(4)
                 this.logic.removeHighlightAvailableMoves();
             }
+        });
+        window.addEventListener('moveFinishedInternal', (e) => {
+            this.canMove = true;
+        });
+        window.addEventListener('reinitBoardInternal', (e: CustomEvent) => {
+            this.logic.updateBoard(this.serializer.deserialize(e.detail.setup));
+        });
+        window.addEventListener('updateActionsCountInternal' , (e: CustomEvent) => {
+            this.logic.actions = e.detail.actions;
+        });
+        window.addEventListener('switchTurnInternal', (e: CustomEvent) => {
+            this.logic.switchTurn(e.detail.actions);
         });
     }
 
