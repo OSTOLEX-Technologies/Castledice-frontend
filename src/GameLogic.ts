@@ -97,7 +97,7 @@ export class GameLogic {
         // Player can only move to a tile that is adjacent to his base or another tile that he owns
         // Player base is located on (9, 9)
 
-        return (this.cells[x][y] === TileState.Empty && this.actions >= OCCUPY_EMPTY_ACTIONS || (this.cells[x][y] === TileState.Opponent || this.cells[x][y] === TileState.OpponentBase && this.actions >= CLASH_ACTIONS)) &&
+        return (this.cells[x][y] === TileState.Empty && this.actions >= OCCUPY_EMPTY_ACTIONS || ((this.cells[x][y] === TileState.Opponent || this.cells[x][y] === TileState.OpponentBase) && this.actions >= CLASH_ACTIONS)) &&
         this.findNeighbours(x, y).some((tile) => tile.state === TileState.PlayerBase || tile.state === TileState.Player);
     }
 
