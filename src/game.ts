@@ -80,6 +80,7 @@ export class Game extends Phaser.Scene {
         });
         window.addEventListener('reinitBoardInternal', (e: CustomEvent) => {
             this.logic.updateBoard(this.serializer.deserialize(e.detail.setup));
+            this.logic.actions = e.detail.actions;
         });
         window.addEventListener('updateActionsCountInternal' , (e: CustomEvent) => {
             this.logic.actions = e.detail.actions;

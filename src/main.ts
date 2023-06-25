@@ -21,7 +21,7 @@ window.addEventListener('message', (e) => {
             setupGame(e.data);
             break;
         case 'reinitBoard':
-            window.dispatchEvent(new CustomEvent('reinitBoardInternal', { detail: e.data.setup }));
+            window.dispatchEvent(new CustomEvent('reinitBoardInternal', { detail: e.data }));
             break;
         case 'updateActionsCount':
             window.dispatchEvent(new CustomEvent('updateActionsCountInternal', { detail: e.data }));
