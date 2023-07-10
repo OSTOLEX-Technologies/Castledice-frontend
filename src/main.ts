@@ -34,9 +34,14 @@ window.addEventListener('message', (e) => {
     }
 })
 
-window.addEventListener('placeChess', (e: CustomEvent) => {
-    const col = e.detail.x;
-    const row = e.detail.y;
-    // @ts-ignore
-    postMessage({ type: 'makeMove', payload: getAbsoluteCoords(col, row, config.playerColor), actions: e.detail.actions })
+window.addEventListener('placeChessBatch', (e: CustomEvent) => {
+    // const col = e.detail.x;
+    // const row = e.detail.y;
+    const lastMoves: Array<[number, number]> = e.detail.lastMoves;
+    postMessage({
+        type: 'makeMove',
+        // @ts-ignore
+        payload: lastMoves.map(([col, row]) => getAbsoluteCoords(col, row, config.playerColor)).flat(),
+        actions: e.detail.actions
+    });
 })
