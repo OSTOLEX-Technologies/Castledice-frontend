@@ -35,13 +35,14 @@ window.addEventListener('message', (e) => {
 })
 
 window.addEventListener('placeChessBatch', (e: CustomEvent) => {
-    // const col = e.detail.x;
-    // const row = e.detail.y;
-    const lastMoves: Array<[number, number]> = e.detail.lastMoves;
+    const lastMoves: Array<[number, number]> = e.detail.movesBatch;
     postMessage({
         type: 'makeMove',
-        // @ts-ignore
-        payload: lastMoves.map(([col, row]) => getAbsoluteCoords(col, row, config.playerColor)).flat(),
+        payload: lastMoves.map(([col, row]) => {
+            // @ts-ignore
+            const coords = getAbsoluteCoords(col, row, config.playerColor);
+            return [coords.row, coords.col];
+        }).flat(),
         actions: e.detail.actions
     });
 })
