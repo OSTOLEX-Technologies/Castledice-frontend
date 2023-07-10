@@ -43,8 +43,11 @@ Try it out: https://near.org/ostolex.near/widget/CastleDice
 
 - **getRoomIdByAddress(address player)** -> (uint256) obtains the ID of the room in which a user is located based on their address.
 
+- **getMyIndex(int roomId)** -> int, returns player index (first player or second) of a method caller for the specific room. 
+
 ## Gamedesign
-#### Video review: 
+#### Video review
+https://youtu.be/LvDQJwyCqK4
 #### Game Design Document 
 [GDD(future ideas included)](https://docs.google.com/document/d/11eUU29k8fY7RZMhJjf4DnZyn3PVrBj_iQnW219KFsPc/edit?usp=sharing)
 #### Current game rules:
