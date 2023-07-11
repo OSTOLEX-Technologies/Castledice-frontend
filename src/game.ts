@@ -86,7 +86,9 @@ export class Game extends Phaser.Scene {
         });
         window.addEventListener('switchTurnInternal', (e: CustomEvent) => {
             console.log("switching turn", e.detail.actions, this.logic.turn, "player", Players.Player, "opponent", Players.Opponent);
-            this.logic.switchTurn(e.detail.actions);
+            if (this.currentPlayerColor !== e.detail.currentPlayer) {
+                this.logic.switchTurn(e.detail.actions);
+            }
             console.log("switched turn", this.logic.turn, "player", Players.Player, "opponent", Players.Opponent);
             this.currentPlayerColor = this.currentPlayerColor === 'red' ? 'blue' : 'red';
             if (this.logic.turn === Players.Player) {
