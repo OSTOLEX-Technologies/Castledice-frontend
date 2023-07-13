@@ -8,6 +8,7 @@ export class GameLogic {
     private isHighlighted = false;
     public actions: number;
     public turn = Players.Player;
+    public lastMoves : Array<[number, number]> = []; // [x, y] or [col, row]
 
     constructor(public board: CastleDiceBoard, setup?: Array<Array<TileState>>) {
         this.cells = new Array<Array<TileState>>(10);
@@ -114,7 +115,11 @@ export class GameLogic {
         this.cells[x][y] = TileState.Player;
         this.board.addPlayerChess({x, y});
         this.removeOpponentTails();
-        window.dispatchEvent(new CustomEvent('placeChess', {detail: {x, y, actions: this.actions}}));
+        this.lastMoves.push([x, y]);
+        if (this.actions === 0) {
+            window.dispatchEvent(new CustomEvent('placeChessBatch', {detail: {movesBatch: this.lastMoves, actions: this.actions}}));
+            this.lastMoves = [];
+        }
     }
 
     public isBoardHighlighted(): boolean {
