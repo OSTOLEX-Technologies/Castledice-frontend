@@ -15,7 +15,7 @@ Try it out: https://near.org/ostolex.near/widget/CastleDice
 #### Project structure:
 1. This repo with game's front-end written with Phaser3
 2. Front-end deployed to S3 bucket
-3. Solidity contract deployed on Aurora mainnet. Contract address: 0xAb926c04Fa3E0CbE23f51BE4Ea2B0777cbB675CC
+3. Solidity contract deployed on Aurora mainnet. Contract address: 0xdABc474d726FBaBB8fE5FAb4D10D9fF1601fc7e4
 4. BOS components
 
 #### Our codebase:
