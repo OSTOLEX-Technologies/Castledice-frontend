@@ -26,73 +26,63 @@ class AlphaGameObject extends GameObject implements Alpha {
 
 export class CastleDiceBoard extends Board<AlphaGameObject> {
     rexBoard: BoardPlugin;
+    scale: number;
 
     constructor(scene, rexBoard: BoardPlugin) {
+        const cellWidth = window.innerHeight * 0.13341804;
+        const cellHeight = window.innerHeight * 0.07623888;
         super(scene, {
             grid: {
                 gridType: 'quadGrid',
                 x: window.innerWidth / 2,
                 y: window.innerHeight / 4.5,
-                cellWidth: 105,
-                cellHeight: 60,
+                cellWidth: cellWidth,
+                cellHeight: cellHeight,
                 type: 'isometric'  // 'orthogonal'|'isometric'
             },
             width: 10,
             height: 10
         });
         this.rexBoard = rexBoard;
+        this.scale = 0.00171429 * cellWidth;
         this.setInteractive()
         this.on('tileover', (pointer: Pointer, tileXY) => {
             pointer.manager.setDefaultCursor('pointer');
-            // const tile  = this.tileXYZToChess(tileXY.x, tileXY.y, 0);
-            // if (tile) {
-            //     tile.setAlpha(1)
-            // }
         })
             .on('tileout', (pointer, tileXY) => {
                 pointer.manager.setDefaultCursor('default');
-                // const tile = this.tileXYZToChess(tileXY.x, tileXY.y, 0);
-                // if (tile) {
-                //     tile.setAlpha(0.5)
-                // }
             })
             .on('tileup', (pointer, tileXY) => {
                 if (this.isBase(tileXY)) {
                     return;
                 }
-                // this.placeChess(tileXY, 'red');
-                // if (this.isHighlighted(tileXY)) {
-                //     this.removeHighlight(tileXY);
-                // } else {
-                //     this.highlightTile(tileXY);
-                // }
             })
     }
 
     public addPlayerBase(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'blueCastle').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
+            this.scene.add.image(0, 0, 'blueCastle').setAlpha(1).setScale(this.scale).setDepth(this.calculateDepth(tileXY)),
             tileXY.x, tileXY.y, ChessType.Base
         );
     }
 
     public addOpponentBase(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'redCastle').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
+            this.scene.add.image(0, 0, 'redCastle').setAlpha(1).setScale(this.scale).setDepth(this.calculateDepth(tileXY)),
             tileXY.x, tileXY.y, ChessType.Base
         );
     }
 
     public addPlayerChess(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'knightBlue').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY) + 1),
+            this.scene.add.image(0, 0, 'knightBlue').setAlpha(1).setScale(this.scale).setDepth(this.calculateDepth(tileXY) + 1),
             tileXY.x, tileXY.y, ChessType.Occupy
         );
     }
 
     public addOpponentChess(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'knightRed').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY) + 1),
+            this.scene.add.image(0, 0, 'knightRed').setAlpha(1).setScale(this.scale).setDepth(this.calculateDepth(tileXY) + 1),
             tileXY.x, tileXY.y, ChessType.Occupy
         );
     }
@@ -107,14 +97,14 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
 
     public addTile(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'defaultTile').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
+            this.scene.add.image(0, 0, 'defaultTile').setAlpha(1).setScale(this.scale).setDepth(this.calculateDepth(tileXY)),
             tileXY.x, tileXY.y, ChessType.BoardPart
         );
     }
 
     public addTree(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'tree').setAlpha(1).setScale(0.18).setDepth(this.calculateDepth(tileXY)),
+            this.scene.add.image(0, 0, 'tree').setAlpha(1).setScale(this.scale).setDepth(this.calculateDepth(tileXY)),
             tileXY.x, tileXY.y, ChessType.Tree
         );
     }
@@ -139,7 +129,7 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
     highlightTile(tileXY: TileXYType): this {
         const textureName = this.isOccupied(tileXY) ? 'clashHighlighted' : 'highlightedTile';
         const texture = this.scene.add.image(0, 0, textureName)
-            .setAlpha(0.4).setScale(0.18).setDepth(this.calculateDepth(tileXY));
+            .setAlpha(0.4).setScale(this.scale).setDepth(this.calculateDepth(tileXY));
         this.addChess(texture, tileXY.x, tileXY.y, ChessType.Highlight, true);
         return this;
     }
