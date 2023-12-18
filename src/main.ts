@@ -2,6 +2,7 @@ import 'phaser';
 import "./style.css";
 import { config } from './game.config';
 import {getAbsoluteCoords, postMessage} from "./utils.ts";
+import boardSetup from "./assets/defaultSetup.json";
 
 
 const setupGame = (data: {type: string, playerColor: 'red' | 'blue', boardSetup: Array<number>, actionsCount: number, currentPlayer: 'red' | 'blue'}) => {
@@ -12,6 +13,17 @@ const setupGame = (data: {type: string, playerColor: 'red' | 'blue', boardSetup:
     new Phaser.Game(config);
     postMessage({ type: 'gameLoaded' })
 }
+
+
+// For testing purposes
+
+// setupGame({
+//     type: 'setupGame',
+//     playerColor: 'red',
+//     boardSetup: boardSetup,
+//     actionsCount: 4,
+//     currentPlayer: 'red'
+// })
 
 
 window.addEventListener('message', (e) => {

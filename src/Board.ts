@@ -5,7 +5,7 @@ import Alpha = Phaser.GameObjects.Components.Alpha;
 import Pointer = Phaser.Input.Pointer;
 import {TileXYType} from "phaser3-rex-plugins/plugins/board/types/Position";
 import destroy = Phaser.Loader.FileTypesManager.destroy;
-import {ChessType, Players} from "./game.config.ts";
+import {ChessType, config, Players} from "./game.config.ts";
 
 
 class AlphaGameObject extends GameObject implements Alpha {
@@ -44,7 +44,7 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
             height: 10
         });
         this.rexBoard = rexBoard;
-        this.scale = 0.00171429 * cellWidth;
+        this.scale = 0.00155429 * cellWidth;
         this.setInteractive()
         this.on('tileover', (pointer: Pointer, tileXY) => {
             pointer.manager.setDefaultCursor('pointer');
@@ -97,7 +97,7 @@ export class CastleDiceBoard extends Board<AlphaGameObject> {
 
     public addTile(tileXY) {
         this.addChess(
-            this.scene.add.image(0, 0, 'defaultTile').setAlpha(1).setScale(this.scale).setDepth(this.calculateDepth(tileXY)),
+            this.scene.add.image(0, 0, config.tiles[tileXY.x][tileXY.y]).setAlpha(1).setScale(this.scale).setDepth(this.calculateDepth(tileXY)),
             tileXY.x, tileXY.y, ChessType.BoardPart
         );
     }
